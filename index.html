@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Border Radius Slider Preview</title>
+  <style>
+    :root {
+      --ui-bg: #f5f3ee;
+      --panel-bg: #fffaf2;
+      --text: #1f1f1f;
+      --accent: #d97706;
+      --track: #e7e1d6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 10% 10%, #fff2d6, #f4efe6);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+    }
+
+    .card {
+      width: min(820px, 100%);
+      background: var(--panel-bg);
+      border: 2px solid #eadfcb;
+      padding: 28px;
+      border-radius: 24px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+      display: grid;
+      gap: 24px;
+    }
+
+    .header {
+      display: grid;
+      gap: 8px;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #514c46;
+    }
+
+    .control {
+      display: grid;
+      gap: 12px;
+      background: #fff4df;
+      border: 1px solid #eadfcb;
+      padding: 16px;
+      border-radius: 16px;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    .file-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .file-input {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid #eadfcb;
+      background: #fffaf2;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .file-input input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-name {
+      font-size: 13px;
+      color: #5a544c;
+      font-variant-numeric: tabular-nums;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: min(420px, 100%);
+      height: 8px;
+      background: var(--track);
+      border-radius: 999px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #fff2d6;
+      box-shadow: 0 4px 10px rgba(217, 119, 6, 0.4);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #fff2d6;
+      cursor: pointer;
+    }
+
+    .value {
+      font-variant-numeric: tabular-nums;
+      padding: 6px 10px;
+      background: #fffaf2;
+      border: 1px solid #eadfcb;
+      border-radius: 999px;
+      min-width: 68px;
+      text-align: center;
+    }
+
+    .preview {
+      display: grid;
+      gap: 12px;
+      place-items: center;
+    }
+
+    .preview img {
+      width: 600px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border: 3px solid #fffaf2;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+      transition: border-radius 120ms ease-out;
+    }
+
+    .output {
+      font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      background: #1f1f1f;
+      color: #fef3c7;
+      padding: 10px 12px;
+      border-radius: 10px;
+      width: fit-content;
+      margin-inline: auto;
+    }
+
+    @media (max-width: 520px) {
+      .control-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="title">모서리 둥글기 슬라이더</div>
+      <div class="subtitle">슬라이더는 0~100%로 표시되고, 실제 CSS 값은 0~50%로 매핑됩니다.</div>
+    </div>
+
+    <div class="control">
+      <div class="file-row">
+        <span class="label">이미지</span>
+        <label class="file-input">
+          파일 선택
+          <input id="imageInput" type="file" accept="image/*" />
+        </label>
+        <span class="file-name" id="fileName">assets/jack-plant-sNWRWbmUg4M-unsplash.jpg</span>
+      </div>
+      <div class="control-row">
+        <label for="radius">표시 값</label>
+        <input id="radius" type="range" min="0" max="100" value="25" step="1" />
+        <div class="value" id="display">25%</div>
+      </div>
+      <div class="output" id="css">border-radius: 90px;</div>
+    </div>
+
+    <div class="preview">
+      <img id="preview" src="assets/jack-plant-sNWRWbmUg4M-unsplash.jpg" alt="preview" />
+    </div>
+  </div>
+
+  <script>
+    const slider = document.getElementById("radius");
+    const display = document.getElementById("display");
+    const css = document.getElementById("css");
+    const preview = document.getElementById("preview");
+    const imageInput = document.getElementById("imageInput");
+    const fileName = document.getElementById("fileName");
+
+    const stepCount = 5;
+    const steps = Array.from({ length: stepCount }, (_, i) =>
+      Math.round((i * 100) / (stepCount - 1))
+    );
+
+    function snapToStep(value) {
+      return steps.reduce((closest, step) => {
+        return Math.abs(step - value) < Math.abs(closest - value) ? step : closest;
+      }, steps[0]);
+    }
+
+    function update() {
+      const rawValue = Number(slider.value);
+      const uiValue = snapToStep(rawValue);
+      if (uiValue !== rawValue) slider.value = String(uiValue);
+      const shortest = Math.min(preview.clientWidth, preview.clientHeight);
+      const radiusPx = (uiValue / 100) * 0.5 * shortest;
+      const rounded = Math.round(radiusPx);
+
+      display.textContent = `${uiValue}%`;
+      preview.style.borderRadius = `${rounded}px`;
+      css.textContent = `border-radius: ${rounded}px;`;
+    }
+
+    slider.addEventListener("input", update);
+    imageInput.addEventListener("change", (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const objectUrl = URL.createObjectURL(file);
+      preview.src = objectUrl;
+      fileName.textContent = file.name;
+      preview.onload = () => {
+        update();
+        URL.revokeObjectURL(objectUrl);
+      };
+    });
+    update();
+
+    window.addEventListener("resize", update);
+  </script>
+</body>
+</html>
